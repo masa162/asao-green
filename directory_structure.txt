@@ -527,7 +527,6 @@
 │       ├── authors
 │       ├── hero
 │       ├── ogp
-│       │   ├── ogp.jpg
 │       │   └── ogp.png
 │       ├── topmok_medteam.png
 │       └── ui
@@ -536,10 +535,10 @@
 │   │   ├── BaseHead.astro
 │   │   ├── Card.astro
 │   │   ├── Footer.astro
-│   │   ├── Header.astro
 │   │   ├── Hero.astro
 │   │   ├── HorizontalCard.astro
 │   │   ├── HorizontalShopItem.astro
+│   │   ├── Nav.astro
 │   │   ├── SideBar.astro
 │   │   ├── SideBarFooter.astro
 │   │   ├── SideBarMenu.astro
@@ -590,4 +589,4 @@
 ├── tailwind.config.cjs
 └── tsconfig.json
 
-533 directories, 58 files
+533 directories, 57 files
