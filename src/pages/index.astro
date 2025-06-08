@@ -5,13 +5,13 @@ import { getCollection } from "astro:content";
 import createSlug from "../lib/createSlug";
 import Hero from "../components/Hero.astro";
 
-// articles コレクションから新着記事3件を取得
+// ✅ 記事コレクションから最新順にソート
 const posts = (await getCollection("articles")).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+  (a, b) => new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf()
 );
 const last_posts = posts.slice(0, 3);
 
-// 記事からタグを抽出
+// ✅ タグ抽出・整列（将来的にタグ表示や検索用）
 const tagSet = new Set<string>();
 posts.forEach((post) => {
   post.data.tags?.forEach((tag) => tagSet.add(tag));
@@ -20,39 +20,44 @@ const sortedTags = Array.from(tagSet).sort((a, b) => a.localeCompare(b, "ja"));
 ---
 
 <BaseLayout
-  title="医スク！ | 医学論文と医療情報のポータルサイト"
-  description="医スク！は、医学論文や医療ニュースをわかりやすく紹介するポータルサイトです。研究者・医療従事者・一般の方に向けて、信頼できる情報を届けます。"
-  image="/ogp.png"
-  url="https://isuku.jp/"
+  title="あさおとみどり｜麻生区の自然とくらしの記録"
+  description="『あさおとみどり』は、川崎市麻生区の自然や植物、季節の風景、地域の魅力をやさしく紹介する観察＆記録ブログです。"
+  image="/images/ogp/ogp.png"
+  url="https://asao-green.netlify.app/"
   sideBarActiveItemID="home"
 >
   <Hero />
 
   <section class="pb-12 mt-5">
-    <h1 class="text-3xl font-bold mb-2">ようこそ、医スク！へ 🩺</h1>
+    <h1 class="text-3xl font-bold mb-2">ようこそ、あさおとみどりへ 🌱</h1>
     <p class="text-lg mb-4">
-      「医スク！」は、最新の医学論文や医療情報を<strong>わかりやすく解説</strong>するWEBポータルです。
-      医療に関心のあるすべての方に向けて、信頼できる情報を届けます。
+      『あさおとみどり』は、川崎市麻生区の自然や植物、季節のうつろいを<strong>やさしく観察・記録</strong>していくローカルブログです。<br />
+      散歩で見つけた草花や公園の景色、身近な生き物たちの記録をお楽しみください。
     </p>
   </section>
 
   <section class="pb-12">
     <h2 class="text-2xl font-bold mb-4">📰 新着記事</h2>
-    <div class="flex flex-col gap-6">
-      {last_posts.map((post) => (
-        <HorizontalCard
-          title={post.data.title}
-          desc={post.data.description}
-          url={`/articles/${post.slug}`}
-          img={post.data.image ?? "/images/ogp/ogp.png"}
-          tags={post.data.tags}
-          pubDate={post.data.pubDate}
-          target="_self"
-        />
-      ))}
-    </div>
-    <div class="mt-6 text-right">
-      <a href="/articles" class="btn btn-outline btn-sm">もっと見る →</a>
-    </div>
+
+    {last_posts.length > 0 ? (
+      <div class="flex flex-col gap-6">
+        {last_posts.map((post) => (
+          <HorizontalCard
+            title={post.data.title}
+            desc={post.data.description}
+            url={`/articles/${post.slug}`}
+            img={post.data.image ?? "/images/ogp/ogp.png"}
+            tags={post.data.tags}
+            pubDate={post.data.pubDate}
+            target="_self"
+          />
+        ))}
+        <div class="mt-6 text-right">
+          <a href="/articles" class="btn btn-outline btn-sm">もっと見る →</a>
+        </div>
+      </div>
+    ) : (
+      <p class="text-gray-500">記事がまだありません。</p>
+    )}
   </section>
 </BaseLayout>

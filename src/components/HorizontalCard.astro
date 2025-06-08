@@ -1,18 +1,22 @@
 ---
 const {
   title,
-  img = "/images/ogp/ogp.png", // デフォルト画像（public配下）
+  img = "/images/ogp/ogp.png", // デフォルト画像
   desc,
   url,
   badge,
-  tags,
+  tags = [],
   pubDate,
   target = "_self"
 } = Astro.props;
 
-// 日付整形
+// 日付整形（nullやstringもカバー）
 const formattedDate = pubDate
-  ? new Date(pubDate).toLocaleDateString("ja-JP")
+  ? new Date(pubDate).toLocaleDateString("ja-JP", {
+      year: "numeric",
+      month: "long",
+      day: "numeric"
+    })
   : "";
 ---
 
@@ -26,7 +30,7 @@ const formattedDate = pubDate
         loading="lazy"
       />
       <div class="grow w-full">
-        <h1 class="text-xl font-bold text-blue-800">
+        <h1 class="text-xl font-bold text-green-800">
           {title}
           {badge && <span class="badge badge-secondary ml-2">{badge}</span>}
         </h1>
@@ -37,10 +41,10 @@ const formattedDate = pubDate
 
         <p class="py-1 text-base text-gray-800">{desc}</p>
 
-        {tags?.length && (
+        {tags.length > 0 && (
           <div class="card-actions justify-start mt-2 flex flex-wrap gap-2">
             {tags.map((tag) => (
-              <a href={`/tags/${tag}`} class="badge badge-outline">
+              <a href={`/tags/${tag}`} class="badge badge-outline" key={tag}>
                 {tag}
               </a>
             ))}

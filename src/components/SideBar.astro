@@ -1,19 +1,19 @@
 ---
 import SideBarFooter from "./SideBarFooter.astro";
-import SideBarMenu from "./SideBarMenu.astro";
 const { sideBarActiveItemID } = Astro.props;
 ---
 
 <div class="drawer-side z-40">
   <label for="my-drawer" class="drawer-overlay"></label>
+  
   <aside class="px-2 pt-2 h-auto min-h-full w-[19rem] bg-base-200 text-base-content flex flex-col">
     
-    <!-- ロゴ画像：クリックでTOPページに遷移 -->
+    <!-- トップ画像（OGPをロゴ代用） -->
     <div class="w-fit mx-auto mt-5 mb-6">
       <a href="/" aria-label="トップページへ">
         <img
           src="/images/ogp/ogp.png"
-          alt="医スク！トップ画像"
+          alt="あさおとみどり トップ画像"
           class="rounded-lg shadow transition ease-in-out hover:scale-[102%] w-[11rem]"
           width="300"
           height="300"
@@ -22,10 +22,35 @@ const { sideBarActiveItemID } = Astro.props;
       </a>
     </div>
 
-    <!-- メニュー一覧 -->
-    <SideBarMenu sideBarActiveItemID={sideBarActiveItemID} />
+    <!-- サイドバーメニュー -->
+    <nav class="flex-1">
+      <ul class="menu px-2 text-sm space-y-1">
+        <!-- 基本ナビゲーション -->
+        <li><a href="/" class="font-semibold">🏠 トップ</a></li>
+        <li><a href="/about">このサイトについて</a></li>
 
-    <!-- フッター -->
+        <!-- コンテンツカテゴリ -->
+        <li class="mt-4 font-semibold">🌿 コンテンツ</li>
+        <li><a href="/parks">公園・緑地マップ</a></li>
+        <li><a href="/plants">植物図鑑</a></li>
+        <li><a href="/seasons">季節の観察記</a></li>
+        <li><a href="/walks">散歩コース案内</a></li>
+
+        <!-- 発見と学び -->
+        <li class="mt-4 font-semibold">🔍 発見と学び</li>
+        <li><a href="/tags">タグ一覧</a></li>
+        <li><a href="/terms">用語・豆知識集</a></li>
+        <li><a href="/links">リンク集</a></li>
+
+        <!-- お問い合わせ -->
+        <li class="mt-4 font-semibold">📮 お問い合わせ</li>
+        <li><a href="/contact">お問い合わせ</a></li>
+        <li><a href="/submit">投稿募集中！</a></li>
+      </ul>
+    </nav>
+
+    <!-- サイドバー下部フッター -->
     <SideBarFooter />
+    
   </aside>
 </div>

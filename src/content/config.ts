@@ -1,5 +1,6 @@
 import { z, defineCollection } from "astro:content";
 
+// 📝 blog コレクションのスキーマ
 const blogSchema = z.object({
   title: z.string(),
   description: z.string(),
@@ -12,6 +13,7 @@ const blogSchema = z.object({
   }).optional(),
 });
 
+// 🛍 store コレクションのスキーマ
 const storeSchema = z.object({
   title: z.string(),
   description: z.string(),
@@ -25,12 +27,13 @@ const storeSchema = z.object({
   heroImage: z.string().optional(),
 });
 
+// 📰 articles コレクションのスキーマ
 const articleSchema = z.object({
   title: z.string(),
   description: z.string(),
-  pubDate: z.string(),
-  heroImage: z.string().optional(),
-  tags: z.array(z.string()).optional(), // ✅ 追加
+  pubDate: z.coerce.date(), // ← ここを z.string() → z.coerce.date() に統一
+  image: z.string().optional(), // ← heroImage ではなく image を使っているのでここも追加
+  tags: z.array(z.string()).optional(),
 });
 
 export type BlogSchema = z.infer<typeof blogSchema>;
