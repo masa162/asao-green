@@ -24,7 +24,7 @@ const articles = (await getCollection("articles")).filter((article) =>
 ---
 
 <BaseLayout
-  title={`タグ: ${tag} | 医スク！`}
+  title={`タグ: ${tag} | あさおとみどり`}
   description={`タグ「${tag}」に関連する医学論文一覧ページです。`}
   image="/ogp.png"
   url={`https://isuku.jp/tags/${tag}`}
@@ -43,7 +43,7 @@ const articles = (await getCollection("articles")).filter((article) =>
             desc={data.description}
             img={data.heroImage}
             url={`/articles/${slug}`}
-            badge="論文"
+            badge="あさおとみどり"
             tags={data.tags}
           />
         ))}

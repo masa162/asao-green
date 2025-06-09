@@ -21,20 +21,20 @@ const articles = (await getCollection("articles")).sort(
 </script>
 
 <BaseLayout
-  title="医学論文一覧 | 医スク！"
-  description="医スク！が厳選した医学論文の一覧ページ。研究者・医療従事者・一般の方向けに、信頼できる医学論文をわかりやすく紹介しています。"
+  title="麻生区の自然観察一覧 | あさおとみどり"
+  description="あさおとみどりが厳選した麻生区の自然観察の一覧ページ。一般の方向けに紹介しています。"
   image="/ogp.png"
   url="https://isuku.jp/articles"
   sideBarActiveItemID="articles"
 >
   <section class="max-w-4xl mx-auto px-6 py-12">
-    <h1 class="text-4xl font-bold mb-6">🗂 医学論文 一覧</h1>
+    <h1 class="text-4xl font-bold mb-6">🌿 観察記事一覧</h1>
 
     <div class="mb-8">
       <input
         id="search"
         type="text"
-        placeholder="🔍 キーワードで検索（例：脳卒中、メタ解析）"
+        placeholder="🔍 キーワードで検索（例：植物、麻生川）"
         class="input input-bordered w-full"
       />
     </div>
@@ -50,7 +50,7 @@ const articles = (await getCollection("articles")).sort(
               desc={data.description}
               img={data.heroImage}
               url={`/articles/${slug}`}
-              badge="論文"
+              badge="あさおとみどり"
               tags={data.tags}
             />
           </div>

@@ -11,8 +11,8 @@ export async function getStaticPaths() {
 const { type } = Astro.params;
 
 const titles = {
-  pro: "医療従事者向け",
-  students: "医学生・研修医向け",
+  pro: "麻生の生活者向け",
+  students: "麻生の生活者向け",
   general: "一般の方向け",
   family: "高齢者・家族向け"
 };
@@ -21,7 +21,7 @@ const pageTitle = titles[type] ?? "読者別おすすめ";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 ---
 
-<BaseLayout title={`${pageTitle} | 医スク！`}>
+<BaseLayout title={`${pageTitle} | あさおとみどり`}>
   <h1 class="text-3xl font-bold mb-4">{pageTitle}</h1>
   <p class="text-lg mb-8">このカテゴリでは「{pageTitle}」向けの記事を紹介しています。</p>
 
