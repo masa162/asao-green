@@ -45,13 +45,15 @@ const articles = (await getCollection("articles")).sort(
       <div class="space-y-6">
         {articles.map(({ slug, data }) => (
           <div class="article-card">
+            {/* HorizontalCard に個別アイキャッチを渡す */}
             <HorizontalCard
               title={data.title}
               desc={data.description}
-              img={data.heroImage}
+              img={data.image}
               url={`/articles/${slug}`}
               badge="あさおとみどり"
               tags={data.tags}
+              pubDate={data.pubDate}
             />
           </div>
         ))}
