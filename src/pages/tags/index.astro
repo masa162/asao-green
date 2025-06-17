@@ -4,15 +4,12 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 
 const articles = await getCollection("articles");
 
-// タグの出現回数をカウント
+// タグ出現回数カウント
 const tagMap = new Map<string, number>();
-for (const article of articles) {
-  article.data.tags?.forEach((tag) => {
-    tagMap.set(tag, (tagMap.get(tag) || 0) + 1);
-  });
+for (const a of articles) {
+  a.data.tags?.forEach((t) => tagMap.set(t, (tagMap.get(t) || 0) + 1));
 }
-
-const sortedTags = Array.from(tagMap.entries()).sort((a, b) =>
+const sortedTags = [...tagMap.entries()].sort((a, b) =>
   a[0].localeCompare(b[0], "ja")
 );
 ---
@@ -33,7 +30,8 @@ const sortedTags = Array.from(tagMap.entries()).sort((a, b) =>
       <ul class="flex flex-wrap gap-3">
         {sortedTags.map(([tag, count]) => (
           <li>
-            <a href={`/tags/${tag}`} class="badge badge-outline text-base">
+            {/* 日本語タグも安全に遷移できるよう encode */}
+            <a href={`/tags/${encodeURIComponent(tag)}`} class="badge badge-outline text-base">
               {tag}（{count}）
             </a>
           </li>

@@ -1,5 +1,4 @@
 ---
-import SideBarFooter from "./SideBarFooter.astro";
 const { sideBarActiveItemID } = Astro.props;
 ---
 
@@ -26,7 +25,7 @@ const { sideBarActiveItemID } = Astro.props;
     <nav class="flex-1">
       <ul class="menu px-2 text-sm space-y-1">
         <!-- 基本ナビゲーション -->
-        <li><a href="/" class="font-semibold">🏠 トップ</a></li>
+        
         <li><a href="/about">このサイトについて</a></li>
 
         <!-- コンテンツカテゴリ -->
@@ -42,15 +41,25 @@ const { sideBarActiveItemID } = Astro.props;
         <li><a href="/terms">用語・豆知識集</a></li>
         <li><a href="/links">リンク集</a></li>
 
-        <!-- お問い合わせ -->
-        <li class="mt-4 font-semibold">📮 お問い合わせ</li>
-        <li><a href="/contact">お問い合わせ</a></li>
-        <li><a href="/submit">投稿募集中！</a></li>
+        
       </ul>
     </nav>
 
-    <!-- サイドバー下部フッター -->
-    <SideBarFooter />
+
+
+    <!-- 未実装機能、候補
+     <li><a href="/submit">投稿募集中！</a></li>
     
+      <li><a href="/" class="font-semibold">🏠 トップ</a></li>
+
+        <li class="mt-4 font-semibold">📮 </li>
+        <li><a href="/contact">お問い合わせ</a></li>
+
+
+      
+    -->
+    <!-- 👇 フッターは削除済み 👇 -->
+    <!-- <SideBarFooter /> -->
+
   </aside>
 </div>

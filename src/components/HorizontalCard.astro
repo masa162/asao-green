@@ -1,7 +1,7 @@
 ---
 const {
   title,
-  img = "/images/ogp/ogp.png", // デフォルト画像
+  img, // デフォルト画像は後で処理
   desc,
   url,
   badge,
@@ -10,7 +10,16 @@ const {
   target = "_self"
 } = Astro.props;
 
-// 日付整形（nullやstringもカバー）
+// Fallback画像は public ディレクトリ内を絶対パスで指定（import不可）
+const FallbackImage = "/images/ogp/ogp.png";
+
+// `img` が string or ImageMetadata どちらでも処理できるように
+const imgSrc =
+  typeof img === "string"
+    ? img
+    : img?.src ?? FallbackImage;
+
+// 日付整形
 const formattedDate = pubDate
   ? new Date(pubDate).toLocaleDateString("ja-JP", {
       year: "numeric",
@@ -24,7 +33,7 @@ const formattedDate = pubDate
   <a href={url} target={target}>
     <div class="hero-content flex-col md:flex-row gap-4">
       <img
-        src={img}
+        src={imgSrc}
         alt={title}
         class="w-full md:w-[13rem] h-auto rounded-lg object-cover"
         loading="lazy"
@@ -44,7 +53,7 @@ const formattedDate = pubDate
         {tags.length > 0 && (
           <div class="card-actions justify-start mt-2 flex flex-wrap gap-2">
             {tags.map((tag) => (
-              <a href={`/tags/${tag}`} class="badge badge-outline" key={tag}>
+              <a href={`/tags/${tag}`} class="badge badge-outline" ={tag}>
                 {tag}
               </a>
             ))}
