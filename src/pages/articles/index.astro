@@ -3,23 +3,40 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import HorizontalCard from "../../components/HorizontalCard.astro";
 import { getCollection } from "astro:content";
 
-// ── 記事メタ取得 ───────────────────────────
+// 📝 1. 記事メタを取得し pubDate 降順でソート
 const articles = (await getCollection("articles")).sort(
   (a, b) => new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf()
 );
 
-// ── 各記事フォルダの 001.(jpg|png|jpeg) を静的 import ─
+// 🖼️ 2. 各記事フォルダの 001.* を静的 import（WebP も含む）
 const thumbs = import.meta.glob(
-  "../../content/articles/*/001.{jpg,jpeg,png}",
+  "../../content/articles/*/001.{jpg,jpeg,png,webp}",
   { eager: true, import: "default" }
 );
-// slug → ImageMetadata の辞書を作成
 const thumbBySlug = Object.fromEntries(
-  Object.entries(thumbs).map(([path, mod]) => [
-    path.split("/").at(-2), // フォルダ名が slug
-    mod                     // ImageMetadata
-  ])
+  Object.entries(thumbs).map(([path, mod]) => [path.split("/").at(-2), mod])
 );
+
+// 🛠️ 3. サムネイル解決ヘルパー
+function resolveImage(post, slug) {
+  const img = post.data.image;
+
+  // (1) ImageMetadata オブジェクト（import 変数）
+  if (img && typeof img === "object") return img;
+
+  // (2) 絶対 / 外部 URL
+  if (typeof img === "string" && (img.startsWith("/") || img.startsWith("http"))) {
+    return img;
+  }
+
+  // (3) 相対パス指定 → フォルダ内 001.* を優先
+  if (typeof img === "string" && thumbBySlug[slug]) {
+    return thumbBySlug[slug];
+  }
+
+  // (4) どれにも該当しない場合はサイト共通 OGP
+  return "/images/ogp/ogp.png";
+}
 ---
 
 <script type="module">
@@ -27,16 +44,16 @@ const thumbBySlug = Object.fromEntries(
   document.getElementById("search")?.addEventListener("input", (e) => {
     const kw = e.target.value.toLowerCase();
     $(".article-card").forEach((c) =>
-      c.style.display = c.innerText.toLowerCase().includes(kw) ? "block" : "none"
+      (c.style.display = c.innerText.toLowerCase().includes(kw) ? "block" : "none")
     );
   });
 </script>
 
 <BaseLayout
   title="麻生区の自然観察一覧 | あさおとみどり"
-  description="あさおとみどりが厳選した麻生区の自然観察の一覧ページ。"
-  image="/ogp.png"
-  url="https://isuku.jp/articles"
+  description="あさおとみどりが厳選した麻生区の自然観察の記事一覧ページ。"
+  image="/images/ogp/ogp.png"
+  url="https://asao-green.netlify.app/articles"
   sideBarActiveItemID="articles"
 >
   <section class="max-w-4xl mx-auto px-6 py-12">
@@ -55,31 +72,19 @@ const thumbBySlug = Object.fromEntries(
       <p class="text-gray-500 dark:text-gray-400">記事がまだありません。</p>
     ) : (
       <div class="space-y-6">
-        {articles.map(({ slug, data }) => {
-          let img = data.image;          // Front-matter 優先
-
-          // ① Front-matter が相対パスなら、ハッシュ化済み 001.jpg を採用
-          if (typeof img === "string" && !img.startsWith("/") && !img.startsWith("http")) {
-            img = thumbBySlug[slug] ?? img; // ImageMetadata が有れば置き換え
-          }
-
-          // ② Front-matter が無ければ自動サムネ
-          if (!img) img = thumbBySlug[slug];
-
-          return (
-            <div class="article-card">
-              <HorizontalCard
-                title={data.title}
-                desc={data.description}
-                img={img}
-                url={`/articles/${slug}`}
-                badge="あさおとみどり"
-                tags={data.tags}
-                pubDate={data.pubDate}
-              />
-            </div>
-          );
-        })}
+        {articles.map((post) => (
+          <div class="article-card">
+            <HorizontalCard
+              title={post.data.title}
+              desc={post.data.description}
+              img={resolveImage(post, post.slug)}
+              url={`/articles/${post.slug}`}
+              badge="あさおとみどり"
+              tags={post.data.tags}
+              pubDate={post.data.pubDate}
+            />
+          </div>
+        ))}
       </div>
     )}
   </section>

@@ -1,51 +1,29 @@
-import { z, defineCollection } from "astro:content";
+import { defineCollection, z } from "astro:content";
 
-// 📝 blog コレクションのスキーマ
-const blogSchema = z.object({
-  title: z.string(),
-  description: z.string(),
-  pubDate: z.coerce.date(),
-  updatedDate: z.string().optional(),
-  heroImage: z.string().optional(),
-  badge: z.string().optional(),
-  tags: z.array(z.string()).refine(items => new Set(items).size === items.length, {
-    message: 'tags must be unique',
-  }).optional(),
+/**
+ * articles コレクション
+ * --------------------------------------------------
+ * - `image()` ビルダーが現在の Astro バージョンではまだ利用できないため、
+ *   `z.any().optional()` に戻してビルドエラーを回避します。
+ * - 変数（ImageMetadata）でも文字列パスでも受け取れる柔軟な型に。
+ */
+const articles = defineCollection({
+  schema: z.object({
+    /** 記事タイトル */
+    title: z.string(),
+
+    /** 記事概要（一覧カードなどで使用） */
+    description: z.string(),
+
+    /** 公開日（文字列でも Date でも OK） */
+    pubDate: z.coerce.date(),
+
+    /** アイキャッチ画像（ImageMetadata or 文字列） */
+    image: z.any().optional(),
+
+    /** タグ（任意） */
+    tags: z.array(z.string()).optional(),
+  }),
 });
 
-// 🛍 store コレクションのスキーマ
-const storeSchema = z.object({
-  title: z.string(),
-  description: z.string(),
-  custom_link_label: z.string(),
-  custom_link: z.string().optional(),
-  updatedDate: z.coerce.date(),
-  pricing: z.string().optional(),
-  oldPricing: z.string().optional(),
-  badge: z.string().optional(),
-  checkoutUrl: z.string().optional(),
-  heroImage: z.string().optional(),
-});
-
-// 📰 articles コレクションのスキーマ
-const articleSchema = z.object({
-  title: z.string(),
-  description: z.string(),
-  pubDate: z.coerce.date(), // ← ここを z.string() → z.coerce.date() に統一
-  image: z.string().optional(), // ← heroImage ではなく image を使っているのでここも追加
-  tags: z.array(z.string()).optional(),
-});
-
-export type BlogSchema = z.infer<typeof blogSchema>;
-export type StoreSchema = z.infer<typeof storeSchema>;
-export type ArticleSchema = z.infer<typeof articleSchema>;
-
-const blogCollection = defineCollection({ schema: blogSchema });
-const storeCollection = defineCollection({ schema: storeSchema });
-const articleCollection = defineCollection({ schema: articleSchema });
-
-export const collections = {
-  blog: blogCollection,
-  store: storeCollection,
-  articles: articleCollection,
-};
+export const collections = { articles };
